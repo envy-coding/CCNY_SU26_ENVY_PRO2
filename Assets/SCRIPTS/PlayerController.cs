@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        rB.maxLinearVelocity = 30;
+        rB.maxlinearVelocity = 30;
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
