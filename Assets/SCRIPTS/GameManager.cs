@@ -7,8 +7,7 @@ public class GameManager : MonoBehaviour
 
     public PlayerState playerState;
     public EnemyState enemyState;
-    public static event Action<> OnPlayerStateChange;
-    public static event Action<EnemyState> OnEnemyStateChange;
+  
 
     public PlayerController Player;
     public EnemyController Enemy;
@@ -16,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance !=null)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
@@ -79,8 +78,6 @@ public class GameManager : MonoBehaviour
                 playerState = PlayerState.Idle;
                 break;
         }
-
-        OnPlayerStateChange?.Invoke(playerState);
     }
 
     public void UpdateGameState(EnemyState eState)
@@ -103,7 +100,5 @@ public class GameManager : MonoBehaviour
                 enemyState = EnemyState.Idle;
                 break;
         }
-
-        OnEnemyStateChange?.Invoke(enemyState);
     }
 }
