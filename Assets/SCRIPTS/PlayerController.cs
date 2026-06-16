@@ -61,6 +61,8 @@ public class PlayerController : MonoBehaviour
             rB.gravityScale = 0f;
             rB.linearVelocity = new Vector2(rB.linearVelocity.x, vertical * speed);
         }
+
+        rB.linearVelocity = new Vector2(horizontal * speed, rB.linearVelocity.y);
     }
 
     public void Move()
