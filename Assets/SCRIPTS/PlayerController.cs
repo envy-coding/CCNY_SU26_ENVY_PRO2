@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateGameState(state);
+        UpdateGameState(playerState);
         Move();
         Jump();
     }
@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
         Dead
     }
 
-    public UpdateGameState(PlayerState state)
+    public void UpdateGameState(PlayerState state)
     {
         playerState = state;
 
