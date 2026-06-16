@@ -8,7 +8,21 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody2D rB;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public PlayerState playerState;
+
+    public static PlayerController Instance;
+
+    private void Awake()
+    {
+        if(Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
     void Start()
     {
             
@@ -22,7 +36,6 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        rB.maxlinearVelocity = 30;
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -34,7 +47,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            rB.AddForce(new Vector2(-rB.linearVelocity.x.normalized*5, 0));
+            rB.AddForce(new Vector2(-rB.linearVelocity.x*5, 0));
         }
     }
 
@@ -43,6 +56,37 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             rB.AddForce(new Vector2(0, 10), ForceMode2D.Impulse);
+        }
+    }
+
+    public enum PlayerState
+    {
+        Idle,
+        Moving,
+        Attacking,
+        Stunned,
+        Dead
+    }
+
+    private void UpdateGameState(PlayerState state)
+    {
+        playerState = state;
+
+        switch (state)
+        {
+            case PlayerState.Idle:
+                break;
+            case PlayerState.Moving:
+                break;
+            case PlayerState.Attacking:
+                break;
+            case PlayerState.Stunned:
+                break;
+            case PlayerState.Dead:
+                break;
+            default:
+                playerState = PlayerState.Idle;
+                break;
         }
     }
 }

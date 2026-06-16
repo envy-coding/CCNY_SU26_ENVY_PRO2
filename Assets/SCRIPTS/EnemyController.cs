@@ -1,16 +1,30 @@
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
-{   public float health;
+{   
+    public static EnemyController Instance;
+    public EnemyState enemyState;
+    public float health;
     public float damage;
-
     public float speed = 10f;
     public Transform player;
 
     public GameObject EnemyPig;
     public GameObject Skeleton;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+    }
     void Start()
     {
         EnemyStats();    
@@ -33,23 +47,47 @@ public class EnemyController : MonoBehaviour
 
     void EnemyStats()
     {
-        if(this.GameObject == "EnemyPig")
+        if(this.gameObject.name == "EnemyPig")
         {
             health = 6;
             damage = 3;
         }
 
-        if(this.GameObject == "Skeleton")
+        if(this.gameObject.name == "Skeleton")
         {
             health = 3;
             damage = 1;
         }
     }
-
-    void Attack()
+    
+    public enum EnemyState
     {
-
+        Idle, 
+        Moving,
+        Attacking,
+        Stunned,
+        Dead
     }
 
-    
+    public void UpdateGameState(EnemyState state)
+    {
+        enemyState = state;
+
+        switch (state)
+        {
+            case EnemyState.Idle:
+                break;
+            case EnemyState.Moving:
+                break;
+            case EnemyState.Attacking:
+                break;
+            case EnemyState.Stunned:
+                break;
+            case EnemyState.Dead:
+                break;
+            default:
+                enemyState = EnemyState.Idle;
+                break;
+        }
+    }
 }
