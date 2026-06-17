@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
         UpdateGameState(playerState);
         Move();
         Jump();
+        Flip();
 
         if (rB.linearVelocity == Vector2.zero)
         {
@@ -70,6 +71,18 @@ public class PlayerController : MonoBehaviour
         rB.linearVelocity = new Vector2(horizontal * speed, rB.linearVelocity.y);
 
         
+    }
+
+    public void Flip()
+    {
+        if (horizontal > 0)
+        {
+            sR.flipX = false;
+        }
+        else if (horizontal < 0)
+        {
+            sR.flipX = true;
+        }
     }
 
     public void Move()
@@ -125,7 +138,22 @@ public class PlayerController : MonoBehaviour
         rB.linearVelocity = Vector2.zero;
         sR.color = Color.red;
 
+        isMoving = false;
+        isAttacking = false;
+        isStunned = false;
+        isAlive = false;
+
         playerState = PlayerState.Dead;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
     public enum PlayerState
@@ -144,42 +172,23 @@ public class PlayerController : MonoBehaviour
         switch (state)
         {
             case PlayerState.Idle:
-                isMoving = false;
-                isAttacking = false;
-                isStunned = false;
-                isAlive = true;
-                sR.color = Color.gray;
+                Idle();
                 break;
            
             case PlayerState.Moving:
-                isMoving = true;
-                isAttacking = false;
-                isStunned = false;
-                isAlive = true;
-                sR.color = Color.green;
+                Moving();
                 break;
             
             case PlayerState.Attacking:
-                isMoving = true;
-                isAttacking = true;
-                isStunned = false;
-                isAlive = true;
-                sR.color = Color.red;
+                Attacking();
                 break;
             
             case PlayerState.Stunned:
-                isMoving = false;
-                isAttacking = false;
-                isStunned = true;
-                isAlive = true;
-                sR.color = Color.yellow;
+                Stunned();
                 break;
             
             case PlayerState.Dead:
-                isMoving = false;
-                isAttacking = false;
-                isStunned = false;
-                isAlive = false;
+                Die();
                 break;
            
             default:
@@ -187,4 +196,41 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
+
+    private void Idle()
+    {
+        isMoving = false;
+        isAttacking = false;
+        isStunned = false;
+        isAlive = true;
+        sR.color = Color.gray;
+    }
+
+    private void Moving()
+    {
+        isMoving = true;
+        isAttacking = false;
+        isStunned = false;
+        isAlive = true;
+        sR.color = Color.green;
+    }
+
+    private void Attacking()
+    {
+        isMoving = false;
+        isAttacking = true;
+        isStunned = false;
+        isAlive = true;
+        sR.color = Color.red;
+    }
+
+    private void Stunned()
+    {
+        isMoving = false;
+        isAttacking = false;
+        isStunned = true;
+        isAlive = true;
+        sR.color = Color.yellow;
+    }
+
 }

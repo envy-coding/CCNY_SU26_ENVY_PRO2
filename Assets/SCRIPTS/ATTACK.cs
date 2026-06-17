@@ -9,12 +9,6 @@ public class Attack : MonoBehaviour
     public Transform shootingPoint;
     public GameObject bulletPrefab;
 
-
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {

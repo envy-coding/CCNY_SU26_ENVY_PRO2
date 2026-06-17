@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 192193923710330752, guid: 81856264b1ce5be44a412c271119fd6a, type: 3}
+      propertyPath: m_Name
+      value: SHOOTING POINT
+      objectReference: {fileID: 0}
     - target: {fileID: 1268333596754269421, guid: 81856264b1ce5be44a412c271119fd6a, type: 3}
       propertyPath: m_Name
       value: PLAYER
@@ -182,7 +186,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1268333596754269421, guid: 81856264b1ce5be44a412c271119fd6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1624299676}
   m_SourcePrefab: {fileID: 100100000, guid: 81856264b1ce5be44a412c271119fd6a, type: 3}
 --- !u!4 &167199887 stripped
 Transform:
@@ -479,6 +486,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &591165611 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4022422058544300096, guid: 81856264b1ce5be44a412c271119fd6a, type: 3}
+  m_PrefabInstance: {fileID: 167199885}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &605938099
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1601,6 +1613,25 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1624299675 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1268333596754269421, guid: 81856264b1ce5be44a412c271119fd6a, type: 3}
+  m_PrefabInstance: {fileID: 167199885}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1624299676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624299675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 961efd9aba5ba864e9ca4bdab030fb6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Attack
+  shootingPoint: {fileID: 591165611}
+  bulletPrefab: {fileID: 5613661059603931903, guid: 71498a368c7032b83a899aa9746e5257, type: 3}
 --- !u!1001 &1998588290
 PrefabInstance:
   m_ObjectHideFlags: 0

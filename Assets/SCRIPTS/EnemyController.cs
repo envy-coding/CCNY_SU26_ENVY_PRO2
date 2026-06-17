@@ -30,13 +30,12 @@ public class EnemyController : MonoBehaviour
     }
     void Start()
     {
-       
-        UpdateGameState(EnemyState.Idle); 
+        enemyState = EnemyState.Idle;
         EnemyStats();  
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         UpdateGameState(enemyState);
     }
@@ -48,9 +47,11 @@ public class EnemyController : MonoBehaviour
             Vector3 direction = (player.position - transform.position).normalized;
             transform.position += direction * speed * Time.deltaTime;
         }
+
+        enemyState = EnemyState.Moving;
     }
 
-    void EnemyStats()
+    public void EnemyStats()
     {
         if(this.gameObject.name == "ENEMY PIG")
         {
@@ -64,7 +65,57 @@ public class EnemyController : MonoBehaviour
             damage = 1;
         }
     }
-    
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Idle()
+    {
+        UpdateGameState(EnemyState.Idle);
+
+        float x = Mathf.Sin(Time.time * frequency) * amplitude;
+        float y = this.transform.position.y;
+        float z = this.transform.position.z;
+ 
+        this.transform.position = new Vector3(x, y, z);
+    }
+
+    public void Stun()
+    {
+        UpdateGameState(EnemyState.Stunned);
+
+        float x = this.transform.localScale.x;
+        float y = Mathf.Pow(this.transform.localScale.y, 3f);
+        float z = this.transform.localScale.z;
+
+        this.transform.localScale = new Vector3(x, y, z);
+    }
+
+    public void Unstun()
+    {
+        UpdateGameState(EnemyState.Moving);
+
+        float x = this.transform.localScale.x;
+        float y = Mathf.Pow(this.transform.localScale.y, 1f/3f);
+        float z = this.transform.localScale.z;
+
+        this.transform.localScale = new Vector3(x, y, z);
+    }
+
+    public void Die()
+    {
+        UpdateGameState(EnemyState.Dead);
+
+        Destroy(this.gameObject);
+    }
+
     public enum EnemyState
     {
         Idle, 
@@ -81,28 +132,22 @@ public class EnemyController : MonoBehaviour
         switch (state)
         {
             case EnemyState.Idle:
-                float x = Mathf.Cos(Time.time * frequency) * amplitude;
-                float y = this.transform.position.y;
-                float z = this.transform.position.z;
-
-                this.transform.position = new Vector3(x, y, z);
+                Idle();
                 break;
             case EnemyState.Moving:
+                Chase();
                 break;
             case EnemyState.Attacking:
                 break;
             case EnemyState.Stunned:
+                Stun();
                 break;
             case EnemyState.Dead:
+                Die();
                 break;
             default:
                 enemyState = EnemyState.Idle;
                 break;
         }
-    }
-
-    public void Idle()
-    {
-        UpdateGameState(EnemyState.Idle);
     }
 }
