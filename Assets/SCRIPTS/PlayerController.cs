@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {       
-         playerState = PlayerState.Idle;
+         UpdateGameState(PlayerState.Idle);
 
          rB = GetComponent<Rigidbody2D>();
          sR = GetComponent<SpriteRenderer>();
@@ -52,6 +52,11 @@ public class PlayerController : MonoBehaviour
         UpdateGameState(playerState);
         Move();
         Jump();
+
+        if (rB.linearVelocity == Vector2.zero)
+        {
+            playerState = PlayerState.Idle;
+        }
     }
 
     private void FixedUpdate()
@@ -63,6 +68,8 @@ public class PlayerController : MonoBehaviour
         }
 
         rB.linearVelocity = new Vector2(horizontal * speed, rB.linearVelocity.y);
+
+        
     }
 
     public void Move()
@@ -76,11 +83,13 @@ public class PlayerController : MonoBehaviour
         }
 
         playerState = PlayerState.Moving;
+
+        
     }
 
     public void Jump()
     {
-        if(Input.GetKeyDown(KeyCode.UpArrow))
+        if(Input.GetKey(KeyCode.UpArrow))
         {
             rB.AddForce(new Vector2(rB.linearVelocity.x, jump));
         }
@@ -139,6 +148,7 @@ public class PlayerController : MonoBehaviour
                 isAttacking = false;
                 isStunned = false;
                 isAlive = true;
+                sR.color = Color.gray;
                 break;
            
             case PlayerState.Moving:
@@ -146,6 +156,7 @@ public class PlayerController : MonoBehaviour
                 isAttacking = false;
                 isStunned = false;
                 isAlive = true;
+                sR.color = Color.green;
                 break;
             
             case PlayerState.Attacking:
@@ -153,6 +164,7 @@ public class PlayerController : MonoBehaviour
                 isAttacking = true;
                 isStunned = false;
                 isAlive = true;
+                sR.color = Color.red;
                 break;
             
             case PlayerState.Stunned:
@@ -160,6 +172,7 @@ public class PlayerController : MonoBehaviour
                 isAttacking = false;
                 isStunned = true;
                 isAlive = true;
+                sR.color = Color.yellow;
                 break;
             
             case PlayerState.Dead:

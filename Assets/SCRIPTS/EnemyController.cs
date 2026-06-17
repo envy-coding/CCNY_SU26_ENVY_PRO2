@@ -1,3 +1,4 @@
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -12,6 +13,8 @@ public class EnemyController : MonoBehaviour
     public GameObject EnemyPig;
     public GameObject Skeleton;
 
+    [SerializeField] private int amplitude = 1;
+    [SerializeField] private float frequency = 1f;
     
 
     private void Awake()
@@ -27,13 +30,15 @@ public class EnemyController : MonoBehaviour
     }
     void Start()
     {
-        EnemyStats();    
+       
+        UpdateGameState(EnemyState.Idle); 
+        EnemyStats();  
     }
 
     // Update is called once per frame
     void Update()
     {
-            
+        UpdateGameState(enemyState);
     }
 
     void Chase()
@@ -47,13 +52,13 @@ public class EnemyController : MonoBehaviour
 
     void EnemyStats()
     {
-        if(this.gameObject.name == "EnemyPig")
+        if(this.gameObject.name == "ENEMY PIG")
         {
             health = 6;
             damage = 3;
         }
 
-        if(this.gameObject.name == "Skeleton")
+        if(this.gameObject.name == "SKELETON")
         {
             health = 3;
             damage = 1;
@@ -76,6 +81,11 @@ public class EnemyController : MonoBehaviour
         switch (state)
         {
             case EnemyState.Idle:
+                float x = Mathf.Cos(Time.time * frequency) * amplitude;
+                float y = this.transform.position.y;
+                float z = this.transform.position.z;
+
+                this.transform.position = new Vector3(x, y, z);
                 break;
             case EnemyState.Moving:
                 break;
@@ -89,5 +99,10 @@ public class EnemyController : MonoBehaviour
                 enemyState = EnemyState.Idle;
                 break;
         }
+    }
+
+    public void Idle()
+    {
+        UpdateGameState(EnemyState.Idle);
     }
 }
