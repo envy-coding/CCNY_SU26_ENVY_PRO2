@@ -271,5 +271,5 @@ MonoBehaviour:
   isStunned: 0
   horizontal: 0
   rB: {fileID: 7237254595828002951}
-  sR: {fileID: 0}
+  sR: {fileID: 6919153854738102548}
   playerState: 0
