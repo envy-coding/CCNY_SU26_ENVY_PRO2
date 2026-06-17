@@ -120,7 +120,7 @@ Transform:
   m_GameObject: {fileID: 1268333596754269421}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -19.14, y: 9.06, z: 0}
+  m_LocalPosition: {x: -13.74, y: 6.790001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -194,7 +194,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1268333596754269421}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -264,5 +264,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   health: 10
   damage: 0
+  jump: 10
+  isAlive: 1
+  isMoving: 0
+  isAttacking: 0
+  isStunned: 0
+  horizontal: 0
   rB: {fileID: 7237254595828002951}
+  sR: {fileID: 0}
   playerState: 0

@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        if(Input.GetKey(KeyCode.UpArrow))
+        if(Input.GetKeyDown(KeyCode.UpArrow))
         {
             rB.AddForce(new Vector2(rB.linearVelocity.x, jump));
         }
