@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour
     public PlayerState playerState;
 
     public static PlayerController Instance;
+    public PlayerController player;
+
+
+    
 
     private void Awake()
     {
@@ -40,23 +44,31 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {       
-         UpdateGameState(PlayerState.Idle);
-
          rB = GetComponent<Rigidbody2D>();
          sR = GetComponent<SpriteRenderer>();
+        
+         playerState = PlayerState.Idle;
+         
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateGameState(playerState);
-        Move();
-        Jump();
-        Flip();
+
+      
 
         if (rB.linearVelocity == Vector2.zero)
         {
             playerState = PlayerState.Idle;
+        }
+
+        if(isAlive)
+        {
+            Move();
+            Jump();
+            Flip();
+            TakeDamage(damage);
         }
     }
 
@@ -102,11 +114,12 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        if(Input.GetKey(KeyCode.UpArrow))
-        {
-            rB.AddForce(new Vector2(rB.linearVelocity.x, jump));
-        }
-
+        
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                rB.linearVelocity = new Vector2(0, jump);
+            }
+        
         playerState = PlayerState.Moving;
     }
 
@@ -129,22 +142,8 @@ public class PlayerController : MonoBehaviour
         }
 
         playerState = PlayerState.Moving;
-
     }
 
-    public void Die()
-    {
-        isAlive = false;
-        rB.linearVelocity = Vector2.zero;
-        sR.color = Color.red;
-
-        isMoving = false;
-        isAttacking = false;
-        isStunned = false;
-        isAlive = false;
-
-        playerState = PlayerState.Dead;
-    }
 
     public void TakeDamage(float damage)
     {
@@ -154,6 +153,8 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
+
+        playerState = PlayerState.Stunned;
     }
 
     public enum PlayerState
@@ -204,6 +205,8 @@ public class PlayerController : MonoBehaviour
         isStunned = false;
         isAlive = true;
         sR.color = Color.gray;
+
+        playerState = PlayerState.Idle;
     }
 
     private void Moving()
@@ -213,6 +216,8 @@ public class PlayerController : MonoBehaviour
         isStunned = false;
         isAlive = true;
         sR.color = Color.green;
+
+        playerState = PlayerState.Moving;
     }
 
     private void Attacking()
@@ -222,6 +227,8 @@ public class PlayerController : MonoBehaviour
         isStunned = false;
         isAlive = true;
         sR.color = Color.red;
+
+        playerState = PlayerState.Attacking;
     }
 
     private void Stunned()
@@ -231,6 +238,33 @@ public class PlayerController : MonoBehaviour
         isStunned = true;
         isAlive = true;
         sR.color = Color.yellow;
+
+        playerState = PlayerState.Stunned;
+    }
+
+    private void Unstun()
+    {
+        playerState = PlayerState.Moving;
+
+        float x = this.transform.localScale.x;
+        float y = Mathf.Pow(this.transform.localScale.y, 1f/3f);
+        float z = this.transform.localScale.z;
+
+        this.transform.localScale = new Vector3(x, y, z);
+    }
+
+    public void Die()
+    {
+        isAlive = false;
+        rB.linearVelocity = Vector2.zero;
+        sR.color = Color.red;
+
+        isMoving = false;
+        isAttacking = false;
+        isStunned = false;
+        isAlive = false;
+
+        playerState = PlayerState.Dead;
     }
 
 }

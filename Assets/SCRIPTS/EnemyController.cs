@@ -1,20 +1,31 @@
-using UnityEditor.Callbacks;
+
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {   
     public static EnemyController Instance;
+    public EnemyController enemy;
     public EnemyState enemyState;
     public float health;
     public float damage;
     public float speed = 10f;
     public Transform player;
 
+    public bool isAlive = true;
+    public bool isMoving;
+    public bool isAttacking;
+    public bool isStunned;
+
     public GameObject EnemyPig;
     public GameObject Skeleton;
 
     [SerializeField] private int amplitude = 1;
     [SerializeField] private float frequency = 1f;
+
+    public Rigidbody2D rB;
+    public SpriteRenderer sR;
+
+
     
 
     private void Awake()
@@ -26,12 +37,31 @@ public class EnemyController : MonoBehaviour
         }
 
         Instance = this;
-
+        EnemyStats();
     }
+   
     void Start()
     {
         enemyState = EnemyState.Idle;
-        EnemyStats();  
+        
+        rB = GetComponent<Rigidbody2D>();
+        sR = GetComponent<SpriteRenderer>();
+    }
+
+    void Update()
+    {
+        UpdateGameState(enemyState);
+
+        if (rB.linearVelocity == Vector2.zero)
+        {
+            enemyState = EnemyState.Idle;
+        }
+
+        if(isAlive)
+        {
+            Chase();
+            TakeDamage(damage);
+        }
     }
 
     // Update is called once per frame
@@ -50,6 +80,7 @@ public class EnemyController : MonoBehaviour
 
         enemyState = EnemyState.Moving;
     }
+
 
     public void EnemyStats()
     {
@@ -78,7 +109,7 @@ public class EnemyController : MonoBehaviour
 
     public void Idle()
     {
-        UpdateGameState(EnemyState.Idle);
+        enemyState = EnemyState.Idle;
 
         float x = Mathf.Sin(Time.time * frequency) * amplitude;
         float y = this.transform.position.y;
@@ -89,7 +120,13 @@ public class EnemyController : MonoBehaviour
 
     public void Stun()
     {
-        UpdateGameState(EnemyState.Stunned);
+        enemyState = EnemyState.Stunned;
+        
+        isMoving = false;
+        isAttacking = false;
+        isStunned = true;
+        isAlive = true;
+        sR.color = Color.yellow;
 
         float x = this.transform.localScale.x;
         float y = Mathf.Pow(this.transform.localScale.y, 3f);
@@ -100,7 +137,7 @@ public class EnemyController : MonoBehaviour
 
     public void Unstun()
     {
-        UpdateGameState(EnemyState.Moving);
+        enemyState = EnemyState.Moving;
 
         float x = this.transform.localScale.x;
         float y = Mathf.Pow(this.transform.localScale.y, 1f/3f);
@@ -111,9 +148,16 @@ public class EnemyController : MonoBehaviour
 
     public void Die()
     {
-        UpdateGameState(EnemyState.Dead);
+        enemyState = EnemyState.Dead;
 
-        Destroy(this.gameObject);
+        isAlive = false;
+        rB.linearVelocity = Vector2.zero;
+        sR.color = Color.red;
+
+        isMoving = false;
+        isAttacking = false;
+        isStunned = false;
+        isAlive = false;
     }
 
     public enum EnemyState
